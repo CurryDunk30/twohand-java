@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ershou.bishe_demo1.Mapper.GoodsOfOrderFormMapper">
+    <resultMap id="BaseResultMap" type="com.ershou.bishe_demo1.Pojo.GoodsOfOrderForm">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="orderid" property="orderid" jdbcType="INTEGER"/>
+        <result column="sid" property="sid" jdbcType="INTEGER"/>
+        <result column="quantity" property="quantity" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="table">
+        shop_order
+    </sql>
+
+    <sql id="all">
+        id, orderid, sid, quantity
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="all"/>
+        from
+        <include refid="table"/>
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="selectByOFid" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="all"/>
+        from
+        <include refid="table"/>
+        where orderid = #{orderid,jdbcType=INTEGER} order by id DESC
+    </select>
+    <select id="selectBySid" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="all"/>
+        from
+        <include refid="table"/>
+        where sid = #{sid,jdbcType=INTEGER} order by id DESC
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from
+        <include refid="table"/>
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.ershou.bishe_demo1.Pojo.GoodsOfOrderForm">
+        insert into
+        <include refid="table"/>
+        (id, orderid, sid, quantity )
+        values (#{id,jdbcType=INTEGER}, #{orderid,jdbcType=INTEGER}, #{sid,jdbcType=INTEGER}
+            , #{quantity,jdbcType=INTEGER} )
+    </insert>
+    <insert id="insertSelective" parameterType="com.ershou.bishe_demo1.Pojo.GoodsOfOrderForm">
+        insert into
+        <include refid="table"/>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="orderid != null">
+                orderid,
+            </if>
+            <if test="sid != null">
+                sid,
+            </if>
+            <if test="quantity != null">
+                quantity,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="orderid != null">
+                #{orderid,jdbcType=INTEGER},
+            </if>
+            <if test="sid != null">
+                #{sid,jdbcType=INTEGER},
+            </if>
+            <if test="quantity != null">
+                #{quantity,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.ershou.bishe_demo1.Pojo.GoodsOfOrderForm">
+        update
+        <include refid="table"/>
+        <set>
+            <if test="ofid != null">
+                orderid = #{orderid,jdbcType=INTEGER},
+            </if>
+            <if test="sid != null">
+                sid = #{sid,jdbcType=INTEGER},
+            </if>
+            <if test="quantity != null">
+                quantity = #{quantity,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.ershou.bishe_demo1.Pojo.GoodsOfOrderForm">
+        update
+        <include refid="table"/>
+        set orderid = #{orderid,jdbcType=INTEGER},
+        sid = #{sid,jdbcType=INTEGER},
+        quantity = #{quantity,jdbcType=INTEGER}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

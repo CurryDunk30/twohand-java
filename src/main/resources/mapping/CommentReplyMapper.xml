@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ershou.bishe_demo1.Mapper.CommentReplyMapper" >
+  <resultMap id="BaseResultMap" type="com.ershou.bishe_demo1.Pojo.CommentReply" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="time" property="time" jdbcType="TIMESTAMP" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="commentid" property="commentid" jdbcType="INTEGER" />
+    <result column="replyuid" property="replyuid" jdbcType="INTEGER" />
+  </resultMap>
+
+  <sql id="table">
+    comment_reply
+  </sql>
+
+  <sql id="all" >
+    id, time, content, commentid, replyuid
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="all" />
+    from <include refid="table"/>
+    where id = #{id,jdbcType=INTEGER} order by id DESC
+  </select>
+  <select id="selectByCommentId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="all" />
+    from <include refid="table"/>
+    where commentid = #{commentId,jdbcType=INTEGER} order by id DESC
+  </select>
+  <select id="getCountsByCommentId" resultType="java.lang.Integer">
+    select
+    count(id)
+    from <include refid="table"/>
+    where commentid = #{commentId,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from <include refid="table"/>
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByCommentId" parameterType="java.lang.Integer" >
+    delete from <include refid="table"/>
+    where commentid = #{commentId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.ershou.bishe_demo1.Pojo.CommentReply" >
+    insert into <include refid="table"/> (id, time, content,
+    commentid, replyuid
+    )
+    values (#{id,jdbcType=INTEGER}, #{time,jdbcType=TIMESTAMP},
+    #{content,jdbcType=VARCHAR}, #{commentid,jdbcType=INTEGER}, #{replyuid,jdbcType=INTEGER}
+    )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ershou.bishe_demo1.Pojo.CommentReply" >
+    insert into <include refid="table"/>
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="time != null" >
+        time,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="commentid != null" >
+        commentid,
+      </if>
+      <if test="replyuid != null" >
+        replyuid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="time != null" >
+        #{time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="commentid != null" >
+        #{commentid,jdbcType=INTEGER},
+      </if>
+      <if test="replyuid != null" >
+        #{replyuid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ershou.bishe_demo1.Pojo.CommentReply" >
+    update <include refid="table"/>
+    <set >
+      <if test="time != null" >
+        time = #{time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="commentid != null" >
+        commentid = #{commentid,jdbcType=INTEGER},
+      </if>
+      <if test="replyuid != null" >
+        replyuid = #{replyuid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ershou.bishe_demo1.Pojo.CommentReply" >
+    update
+    <include refid="table"/>
+    set time = #{time,jdbcType=TIMESTAMP},
+    content = #{content,jdbcType=VARCHAR},
+    commentid = #{commentid,jdbcType=INTEGER},
+    replyuid = #{replyuid,jdbcType=INTEGER},
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

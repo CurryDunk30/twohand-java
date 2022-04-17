@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ershou.bishe_demo1.Mapper.GiftInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.ershou.bishe_demo1.Pojo.GiftInfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="kind" property="kind" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="receivename" property="receivename" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="tel" property="tel" jdbcType="CHAR" />
+    <result column="level" property="level" jdbcType="INTEGER" />
+    <result column="quantity" property="quantity" jdbcType="INTEGER" />
+    <result column="receiveuid" property="receiveuid" jdbcType="INTEGER" />
+    <result column="giveuid" property="giveuid" jdbcType="INTEGER" />
+  </resultMap>
+
+  <sql id="table">
+    gift
+  </sql>
+
+  <sql id="all" >
+    id, createtime, kind, name, receivename, remark, address, tel, level, quantity, receiveuid, giveuid
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="all" />
+    from <include refid="table"/>
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="getCountsByReceive" resultType="java.lang.Integer">
+    select
+    count(id)
+    from <include refid="table"/>
+    where receiveuid = #{receiveUid}
+  </select>
+  <select id="getCountsByGive" resultType="java.lang.Integer">
+    select
+    count(id)
+    from <include refid="table"/>
+    where giveuid = #{giveUid}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from <include refid="table"/>
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.ershou.bishe_demo1.Pojo.GiftInfo" >
+    insert into <include refid="table"/> (id, createtime, kind, name, receivename, remark,
+    address, tel, level, quantity, receiveuid, giveuid
+    )
+    values (#{id,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, #{kind,jdbcType=INTEGER},
+      #{name,jdbcType=VARCHAR}, #{receivename,jdbcType=VARCHAR},#{remark,jdbcType=VARCHAR},
+      #{address,jdbcType=VARCHAR},#{tel,jdbcType=CHAR},#{level,jdbcType=INTEGER},#{quantity,jdbcType=INTEGER},
+      #{receiveuid,jdbcType=INTEGER},#{giveuid,jdbcType=INTEGER}
+    )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ershou.bishe_demo1.Pojo.GiftInfo" >
+    insert into <include refid="table"/>
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+      <if test="kind != null" >
+        kind,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="receivename != null" >
+        receivename,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="tel != null" >
+        tel,
+      </if>
+      <if test="level != null" >
+        level,
+      </if>
+      <if test="quantity != null" >
+        quantity,
+      </if>
+      <if test="receiveuid != null" >
+        receiveuid,
+      </if>
+      <if test="giveuid != null" >
+        giveuid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="kind != null" >
+        #{kind,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="receivename != null" >
+        #{receivename,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        #{tel,jdbcType=CHAR},
+      </if>
+      <if test="level != null" >
+        #{level,jdbcType=INTEGER},
+      </if>
+      <if test="quantity != null" >
+        #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="receiveuid != null" >
+        #{receiveuid,jdbcType=INTEGER},
+      </if>
+      <if test="giveuid != null" >
+        #{giveuid,jdbcType=INTEGER}
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ershou.bishe_demo1.Pojo.GiftInfo" >
+    update <include refid="table"/>
+    <set >
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="kind != null" >
+        kind = #{kind,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="receivename != null" >
+        receivename = #{receivename,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        tel = #{tel,jdbcType=CHAR},
+      </if>
+      <if test="level != null" >
+        level = #{level,jdbcType=INTEGER},
+      </if>
+      <if test="quantity != null" >
+        quantity = #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="receiveuid != null" >
+        receiveuid = #{receiveuid,jdbcType=INTEGER},
+      </if>
+      <if test="giveuid != null" >
+        giveuid = #{giveuid,jdbcType=INTEGER}
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ershou.bishe_demo1.Pojo.GiftInfo" >
+    update
+    <include refid="table"/>
+    set createtime = #{createtime,jdbcType=TIMESTAMP},
+    kind = #{kind,jdbcType=INTEGER},
+    name = #{name,jdbcType=VARCHAR},
+    receivename = #{receivename,jdbcType=VARCHAR},
+    remark = #{remark,jdbcType=VARCHAR},
+    address = #{address,jdbcType=VARCHAR},
+    tel = #{tel,jdbcType=CHAR},
+    level = #{level,jdbcType=INTEGER},
+    quantity = #{quantity,jdbcType=INTEGER},
+    receiveuid = #{receiveuid,jdbcType=INTEGER},
+    giveuid = #{giveuid,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectPageByReceive" resultMap="BaseResultMap">
+    select
+    <include refid="all"/>
+    from <include refid="table"/>
+    where receiveuid = #{receiveUid,jdbcType=INTEGER} order by id DESC
+    limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+  </select>
+  <select id="selectPageByGive" resultMap="BaseResultMap">
+    select
+    <include refid="all"/>
+    from <include refid="table"/>
+    where giveuid = #{giveUid,jdbcType=INTEGER} order by id DESC
+    limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+  </select>
+  <select id="selectByKind" resultMap="BaseResultMap">
+    select
+    <include refid="all" />
+    from <include refid="table"/>
+    where kind = #{kind, jdbcType=INTEGER} order by id desc
+  </select>
+</mapper>

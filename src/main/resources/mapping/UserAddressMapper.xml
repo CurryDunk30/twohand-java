@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ershou.bishe_demo1.Mapper.UserAddressMapper" >
+    <resultMap id="BaseResultMap" type="com.ershou.bishe_demo1.Pojo.UserAddress" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="address" property="address" jdbcType="VARCHAR" />
+        <result column="uid" property="uid" jdbcType="INTEGER" />
+        <result column="common" property="common" jdbcType="INTEGER" />
+        <result column="tel" property="tel" jdbcType="CHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="table">
+        user_address
+    </sql>
+
+    <sql id="all" >
+        id, uid, address, tel, common, name
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        select
+        <include refid="all" />
+        from <include refid="table"/>
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="getCounts" resultType="java.lang.Integer">
+        select
+        count(id)
+        from <include refid="table"/>
+        where uid = #{uid}
+    </select>
+    <select id="selectByUid" resultMap="BaseResultMap">
+        SELECT
+        <include refid="all" />
+        from <include refid="table"/>
+        where uid =#{uid,jdbcType=INTEGER}
+    </select>
+    <select id="selectDefaultByUid" resultMap="BaseResultMap">
+        SELECT
+        <include refid="all" />
+        from <include refid="table"/>
+        where uid =#{uid,jdbcType=INTEGER} and common = 1
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+        delete from <include refid="table"/>
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.ershou.bishe_demo1.Pojo.UserAddress" >
+        insert into <include refid="table"/> (uid, address, tel, common, name)
+        values ( #{uid,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR},
+        #{tel,jdbcType=CHAR}, #{common,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.ershou.bishe_demo1.Pojo.UserAddress" >
+        insert into <include refid="table"/>
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="uid != null" >
+                uid,
+            </if>
+            <if test="address != null" >
+                address,
+            </if>
+            <if test="tel != null" >
+                tel,
+            </if>
+            <if test="common != null" >
+                common,
+            </if>
+            <if test="name != null" >
+                name,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id = #{id,jdbcType=INTEGER},
+            </if>
+            <if test="uid != null" >
+                uid = #{uid,jdbcType=INTEGER},
+            </if>
+            <if test="address != null" >
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="tel != null" >
+                tel = #{tel,jdbcType=CHAR},
+            </if>
+            <if test="common != null" >
+                common = #{common,jdbcType=INTEGER},
+            </if>
+            <if test="name != null" >
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.ershou.bishe_demo1.Pojo.UserAddress" >
+        update <include refid="table"/>
+        <set >
+            <if test="uid != null" >
+                uid = #{uid,jdbcType=INTEGER},
+            </if>
+            <if test="address != null" >
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="tel != null" >
+                tel = #{tel,jdbcType=CHAR},
+            </if>
+            <if test="common != null" >
+                common = #{common,jdbcType=INTEGER},
+            </if>
+            <if test="name != null" >
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.ershou.bishe_demo1.Pojo.UserAddress" >
+        update
+        <include refid="table"/>
+        set
+        uid = #{uid,jdbcType=INTEGER},
+        address = #{address,jdbcType=VARCHAR},
+        tel = #{tel,jdbcType=CHAR},
+        common = #{display,jdbcType=INTEGER},
+        name = #{address,jdbcType=VARCHAR},
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ershou.bishe_demo1.Mapper.WantShopMapper">
+    <resultMap id="BaseResultMap" type="com.ershou.bishe_demo1.Pojo.WantShop">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="modified" property="modified" jdbcType="TIMESTAMP"/>
+        <result column="display" property="display" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="kind" property="kind" jdbcType="INTEGER"/>
+        <result column="quantity" property="quantity" jdbcType="INTEGER"/>
+        <result column="level" property="level" jdbcType="INTEGER"/>
+        <result column="uid" property="uid" jdbcType="INTEGER"/>
+        <result column="price" property="price" jdbcType="DECIMAL"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="image" property="image" jdbcType="VARCHAR" />
+    </resultMap>
+    
+    <sql id="table">
+        want_shops
+    </sql>
+    
+    <sql id="all">
+        id, modified, display, name, kind, quantity, price, remark, uid, image, level
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="all"/>
+        from <include refid="table"/>
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="getCounts" resultType="java.lang.Integer">
+        select count(id)
+        from <include refid="table"/>
+        where uid = #{uid,jdbcType=INTEGER}
+          and display = 1
+    </select>
+    <select id="getCountsByState" resultType="java.lang.Integer">
+        select count(id)
+        from <include refid="table"/>
+        <if test="state != -1">
+        where display = #{state,jdbcType=INTEGER}
+        </if>
+    </select>
+    <select id="getCountsByUidAndState" resultType="java.lang.Integer">
+        select count(id)
+        from <include refid="table"/>
+        where uid = #{uid,jdbcType=INTEGER}
+        <if test="state != -1">
+        and display = #{state,jdbcType=INTEGER}
+        </if>
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT
+        <include refid="all"/>
+        from <include refid="table"/>
+        order by id desc
+    </select>
+    <select id="searchStateBySize" resultMap="BaseResultMap">
+        select
+        <include refid="all" />
+        from <include refid="table"/>
+        where name like CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+        <if test="display != -1">
+        and display = #{display,jdbcType=INTEGER}
+        </if>
+        <if test="kind != -1">
+        and kind = #{kind,jdbcType=INTEGER}
+        </if>
+        <if test="level != -1">
+        and level = #{level,jdbcType=INTEGER}
+        </if> order by id desc
+        limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+    </select>
+    <select id="searchStateByUserAndSize" resultMap="BaseResultMap">
+        select
+        <include refid="all" />
+        from <include refid="table"/>
+        where name like CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+        and uid = #{uid,jdbcType=INTEGER}
+        <if test="display != -1">
+            and display = #{display,jdbcType=INTEGER}
+        </if>
+        <if test="kind != -1">
+            and kind = #{kind,jdbcType=INTEGER}
+        </if>
+        <if test="level != -1">
+            and level = #{level,jdbcType=INTEGER}
+        </if> order by id desc
+        limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+    </select>
+    <select id="getSearchStateCounts" resultType="java.lang.Integer">
+        select count(id)
+        from <include refid="table"/>
+        where
+        name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
+        <if test="searchState != -1" >
+            and display = #{searchState,jdbcType=INTEGER}
+        </if>
+        <if test="searchLevel != -1" >
+            and level = #{searchLevel, jdbcType=INTEGER}
+        </if>
+        <if test="categoryType != -1" >
+            and kind = #{categoryType, jdbcType=INTEGER}
+        </if>
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from <include refid="table"/>
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.ershou.bishe_demo1.Pojo.WantShop">
+        insert into <include refid="table"/> (id, modified, display, name, kind, quantity, price, remark, uid, image, level)
+        values (#{id,jdbcType=INTEGER},
+                #{modified,jdbcType=TIMESTAMP},
+                #{display,jdbcType=INTEGER},
+                #{name,jdbcType=VARCHAR},
+                #{kind,jdbcType=INTEGER},
+                #{quantity,jdbcType=INTEGER},
+                #{price,jdbcType=DECIMAL},
+                #{remark,jdbcType=VARCHAR},
+               #{uid,jdbcType=INTEGER},
+                #{image,jdbcType=VARCHAR},
+        #{level,jdbcType=INTEGER})
+    </insert>
+    <insert id="insertSelective" parameterType="com.ershou.bishe_demo1.Pojo.WantShop">
+        insert into <include refid="table"/>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="modified != null">
+                modified,
+            </if>
+            <if test="display != null">
+                display,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="kind != null">
+                kind,
+            </if>
+            <if test="quantity != null">
+                quantity,
+            </if>
+            <if test="price != null">
+                price,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="uid != null">
+                uid,
+            </if>
+            <if test="image != null">
+                image,
+            </if>
+            <if test="level != null">
+                level,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="modified != null">
+                #{modified,jdbcType=TIMESTAMP},
+            </if>
+            <if test="display != null">
+                #{display,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="kind != null">
+                #{kind,jdbcType=INTEGER},
+            </if>
+            <if test="quantity != null">
+                #{quantity,jdbcType=INTEGER},
+            </if>
+            <if test="price != null">
+                #{price,jdbcType=DECIMAL},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="uid != null">
+                #{uid,jdbcType=INTEGER},
+            </if>
+            <if test="image != null">
+                #{image,jdbcType=VARCHAR},
+            </if>
+            <if test="level != null">
+                #{level,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.ershou.bishe_demo1.Pojo.WantShop">
+        update <include refid="table"/>
+        <set>
+            <if test="modified != null">
+                modified = #{modified,jdbcType=TIMESTAMP},
+            </if>
+            <if test="display != null">
+                display = #{display,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="kind != null">
+                kind = #{kind,jdbcType=INTEGER},
+            </if>
+            <if test="quantity != null">
+                quantity = #{quantity,jdbcType=INTEGER},
+            </if>
+            <if test="price != null">
+                price = #{price,jdbcType=DECIMAL},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="uid != null">
+                uid = #{uid,jdbcType=INTEGER},
+            </if>
+            <if test="image != null">
+                image = #{image,jdbcType=VARCHAR},
+            </if>
+            <if test="level != null">
+                level = #{level,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.ershou.bishe_demo1.Pojo.WantShop">
+        update <include refid="table"/>
+        set modified = #{modified,jdbcType=TIMESTAMP},
+            display  = #{display,jdbcType=INTEGER},
+            name     = #{name,jdbcType=VARCHAR},
+            kind     = #{kind,jdbcType=INTEGER},
+            quantity = #{quantity,jdbcType=INTEGER},
+            price    = #{price,jdbcType=DECIMAL},
+            remark   = #{remark,jdbcType=VARCHAR},
+            uid = #{uid,jdbcType=INTEGER},
+            image = #{image,jdbcType=VARCHAR},
+            level = #{level,jdbcType=INTEGER}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <select id="selectByKind" resultMap="BaseResultMap">
+        select
+        <include refid="all" />
+        from <include refid="table"/>
+        where kind = #{kind, jdbcType=INTEGER} order by id desc
+    </select>
+</mapper>

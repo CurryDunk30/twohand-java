@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ershou.bishe_demo1.Mapper.ExchangeInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.ershou.bishe_demo1.Pojo.ExchangeInfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="level" property="level" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="image" property="image" jdbcType="VARCHAR" />
+    <result column="kind" property="kind" jdbcType="INTEGER" />
+    <result column="shop_quantity" property="shopQuantity" jdbcType="INTEGER" />
+    <result column="quantity" property="quantity" jdbcType="INTEGER" />
+    <result column="seller_uid" property="sellerUid" jdbcType="INTEGER" />
+    <result column="exchange_uid" property="exchangeUid" jdbcType="INTEGER" />
+    <result column="seller_sid" property="sellerSid" jdbcType="INTEGER" />
+  </resultMap>
+
+  <sql id="table">
+    exchanges
+  </sql>
+
+  <sql id="all" >
+    id, create_time, name, state, level, remark, kind, quantity, seller_uid, exchange_uid, seller_sid, shop_quantity, image
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    select 
+    <include refid="all" />
+    from <include refid="table"/>
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectBySellerAndPage" resultMap="BaseResultMap">
+    select
+    <include refid="all" />
+    from <include refid="table"/>
+    where seller_uid = #{sellerUid,jdbcType=INTEGER} order by id desc
+    limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+  </select>
+  <select id="selectBySellerAndState" resultMap="BaseResultMap">
+    select
+    <include refid="all" />
+    from <include refid="table"/>
+    where seller_uid = #{sellerUid,jdbcType=INTEGER}
+    <if test="state != -1">
+    and state = #{state,jdbcType=INTEGER}
+    </if> order by id desc
+  </select>
+  <select id="selectBySellerAndStatePage" resultMap="BaseResultMap">
+    select
+    <include refid="all" />
+    from <include refid="table"/>
+    where seller_uid = #{sellerUid,jdbcType=INTEGER}
+    <if test="state != -1">
+      and state = #{state,jdbcType=INTEGER}
+    </if> order by id desc
+    limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+  </select>
+  <select id="selectByExchangeAndPage" resultMap="BaseResultMap">
+    select
+    <include refid="all" />
+    from <include refid="table"/>
+    where exchange_uid = #{exchangeUid,jdbcType=INTEGER} order by id desc
+    limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+  </select>
+  <select id="selectByExchangeAndState" resultMap="BaseResultMap">
+    select
+    <include refid="all" />
+    from <include refid="table"/>
+    where exchange_uid = #{exchangeUid,jdbcType=INTEGER}
+    <if test="state != -1">
+      and state = #{state,jdbcType=INTEGER}
+    </if> order by id desc
+  </select>
+  <select id="selectByExchangeAndStatePage" resultMap="BaseResultMap">
+    select
+    <include refid="all" />
+    from <include refid="table"/>
+    where exchange_uid = #{exchangeUid,jdbcType=INTEGER}
+    <if test="state != -1">
+      and state = #{state,jdbcType=INTEGER}
+    </if> order by id desc
+    limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+  </select>
+
+  <select id="getCounts" resultType="java.lang.Integer">
+    select count(id)
+    from <include refid="table"/>
+  </select>
+  <select id="getCountsBySeller" resultType="java.lang.Integer">
+    select count(id)
+    from <include refid="table"/>
+    where seller_uid = #{sellerUid,jdbcType=INTEGER}
+  </select>
+  <select id="getCountsByExchange" resultType="java.lang.Integer">
+    select count(id)
+    from <include refid="table"/>
+    where exchange_uid = #{exchangeUid,jdbcType=INTEGER}
+  </select>
+  <select id="getSellerStateCounts" resultType="java.lang.Integer">
+    select count(id)
+    from <include refid="table"/>
+    where seller_uid = #{sellerUid,jdbcType=INTEGER}
+    <if test="state != -1" >
+      and state = #{state,jdbcType=INTEGER}
+    </if>
+    and name like CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+  </select>
+  <select id="getExchangeStateCounts" resultType="java.lang.Integer">
+    select count(id)
+    from <include refid="table"/>
+    where exchange_uid = #{exchangeUid,jdbcType=INTEGER}
+    <if test="state != -1" >
+      and state = #{state,jdbcType=INTEGER}
+    </if>
+    and name like CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+  </select>
+  <select id="getSearchStateCounts" resultType="java.lang.Integer">
+    select count(id)
+    from <include refid="table"/>
+    where
+    name like CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+    <if test="state != -1" >
+    and state = #{state,jdbcType=INTEGER}
+    </if>
+    <if test="level != -1" >
+    and level = #{level, jdbcType=INTEGER}
+    </if>
+    <if test="kind != -1" >
+    and kind = #{kind, jdbcType=INTEGER}
+    </if>
+  </select>
+  <select id="selectByName" resultMap="BaseResultMap">
+    select
+    <include refid="all" />
+    from <include refid="table"/>
+    where name LIKE CONCAT('%',#{name},'%') order by id desc
+    limit 12
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from <include refid="table"/>
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteBySellerSid" parameterType="java.lang.Integer" >
+    delete from <include refid="table"/>
+    where seller_sid = #{sellerSid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.ershou.bishe_demo1.Pojo.ExchangeInfo" >
+    insert into <include refid="table"/> (id, create_time, name, state, level, remark, kind,
+        quantity, seller_uid, exchange_uid  , seller_sid, shop_quantity, image)
+    values (#{id,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{name,jdbcType=VARCHAR},
+      #{state,jdbcType=INTEGER}, #{level,jdbcType=INTEGER},  #{remark,jdbcType=VARCHAR},
+      #{kind,jdbcType=INTEGER},  #{quantity,jdbcType=INTEGER},
+      #{sellerUid,jdbcType=INTEGER}, #{exchangeUid,jdbcType=INTEGER}, #{sellerSid,jdbcType=INTEGER},
+      #{shopQuantity,jdbcType=INTEGER}, #{image,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ershou.bishe_demo1.Pojo.ExchangeInfo" >
+    insert into <include refid="table"/>
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="level != null" >
+        level,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="kind != null" >
+        kind,
+      </if>
+      <if test="quantity != null" >
+        quantity,
+      </if>
+      <if test="sellerUid != null" >
+        seller_uid,
+      </if>
+      <if test="exchangeUid != null" >
+        exchange_uid,
+      </if>
+      <if test="sellerSid != null" >
+        seller_sid,
+      </if>
+      <if test="shopQuantity != null" >
+        shop_quantity,
+      </if>
+      <if test="image != null" >
+        image,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="level != null" >
+        #{level,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="kind != null" >
+        #{kind,jdbcType=INTEGER},
+      </if>
+      <if test="quantity != null" >
+        #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="sellerUid != null" >
+        #{sellerUid,jdbcType=INTEGER},
+      </if>
+      <if test="exchangeUid != null" >
+        #{exchangeUid,jdbcType=INTEGER},
+      </if>
+      <if test="sellerSid != null" >
+        #{sellerSid,jdbcType=INTEGER},
+      </if>
+      <if test="shopQuantity != null" >
+        #{shopQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="image != null" >
+        #{image,jdbcType=INTEGER}
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ershou.bishe_demo1.Pojo.ExchangeInfo" >
+    update <include refid="table"/>
+    <set >
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="level != null" >
+        level = #{level,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="kind != null" >
+        kind = #{kind,jdbcType=INTEGER},
+      </if>
+      <if test="quantity != null" >
+        quantity = #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="sellerUid != null" >
+        seller_uid = #{sellerUid,jdbcType=INTEGER},
+      </if>
+      <if test="exchangeUid != null" >
+        exchange_uid = #{exchangeUid,jdbcType=INTEGER},
+      </if>
+      <if test="sellerSid != null" >
+        seller_sid = #{sellerSid,jdbcType=INTEGER},
+      </if>
+      <if test="shopQuantity != null" >
+        shop_quantity = #{shopQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="image != null" >
+        image = #{image,jdbcType=INTEGER}
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ershou.bishe_demo1.Pojo.ExchangeInfo" >
+    update
+    <include refid="table"/>
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      name = #{name,jdbcType=VARCHAR},
+      level = #{level,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      kind = #{kind,jdbcType=INTEGER},
+      state = #{state,jdbcType=INTEGER},
+      quantity = #{quantity,jdbcType=INTEGER},
+      seller_uid = #{sellerUid,jdbcType=INTEGER},
+      exchange_uid = #{exchangeUid ,jdbcType=INTEGER},
+      seller_sid = #{sellerSid,jdbcType=INTEGER},
+      shop_quantity = #{shopQuantity,jdbcType=INTEGER},
+      image = #{image,jdbcType=VARCHAR},
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByKind" resultMap="BaseResultMap">
+    select
+    <include refid="all" />
+    from <include refid="table"/>
+    where kind = #{kind, jdbcType=INTEGER} order by id desc
+  </select>
+</mapper>

@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ershou.bishe_demo1.Mapper.OrderFormMapper" >
+  <resultMap id="BaseResultMap" type="com.ershou.bishe_demo1.Pojo.OrderForm" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="modified" property="modified" jdbcType="TIMESTAMP" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="paystate" property="paystate" jdbcType="INTEGER" />
+    <result column="uid" property="uid" jdbcType="INTEGER" />
+    <result column="sellerid" property="sellerid" jdbcType="INTEGER" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="message" property="message" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="tel" property="tel" jdbcType="CHAR" />
+  </resultMap>
+
+  <sql id="table">
+    orderform
+  </sql>
+
+  <sql id="all" >
+    id, modified, state, paystate, uid, address, message, sellerid, name, tel
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="all" />
+    from <include refid="table"/>
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="getCounts" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+    select count(id)
+    from <include refid="table"/>
+    where uid = #{uid,jdbcType=INTEGER}
+  </select>
+  <select id="getCountsByState" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+    select count(id)
+    from <include refid="table"/>
+    where uid = #{uid,jdbcType=INTEGER}
+    <if test="state != -1">
+      and state = #{state, jdbcType=INTEGER}
+    </if>
+    <if test="paystate != -1">
+      and paystate = #{paystate, jdbcType=INTEGER}
+    </if>
+  </select>
+  <select id="getSellCountsByState" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+    select count(id)
+    from <include refid="table"/>
+    where sellerid = #{sellerId,jdbcType=INTEGER}
+    <if test="state != -1">
+      and state = #{state, jdbcType=INTEGER}
+    </if>
+    <if test="paystate != -1">
+      and paystate = #{paystate, jdbcType=INTEGER}
+    </if>
+  </select>
+  <select id="getSearchCountByStateAndPayState" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+    select count(id)
+    from <include refid="table"/>
+    where address like CONCAT('%',#{address,jdbcType=VARCHAR},'%')
+    <if test="state != -1">
+    and state = #{state, jdbcType=INTEGER}
+    </if>
+    <if test="paystate != -1">
+    and paystate = #{paystate, jdbcType=INTEGER}
+    </if>
+  </select>
+
+  <select id="selectByUid" resultMap="BaseResultMap">
+    select
+    <include refid="all"/>
+    from <include refid="table"/>
+    where uid = #{uid,jdbcType=INTEGER} order by id DESC
+  </select>
+  <select id="selectByUidAndState" resultMap="BaseResultMap">
+    select
+    <include refid="all"/>
+    from <include refid="table"/>
+    where uid = #{uid,jdbcType=INTEGER}
+    <if test="state != -1">
+      and state = #{state, jdbcType=INTEGER}
+    </if>
+    <if test="paystate != -1">
+      and paystate = #{paystate, jdbcType=INTEGER}
+    </if> order by id DESC
+    limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+  </select>
+  <select id="selectSellerByUidAndState" resultMap="BaseResultMap">
+    select
+    <include refid="all"/>
+    from <include refid="table"/>
+    where sellerid = #{sellerId,jdbcType=INTEGER}
+    <if test="state != -1">
+      and state = #{state, jdbcType=INTEGER}
+    </if>
+    <if test="paystate != -1">
+      and paystate = #{paystate, jdbcType=INTEGER}
+    </if> order by id DESC
+    limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+  </select>
+  <select id="selectByPaystateAndState" resultMap="BaseResultMap">
+    select
+    <include refid="all"/>
+    from <include refid="table"/>
+    where address like CONCAT('%',#{address,jdbcType=VARCHAR},'%')
+    <if test="state != -1">
+      and state = #{state, jdbcType=INTEGER}
+    </if>
+    <if test="paystate != -1">
+      and paystate = #{paystate, jdbcType=INTEGER}
+    </if> order by id DESC
+    limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+  </select>
+  <select id="selectUserNew" resultMap="BaseResultMap">
+    select
+    <include refid="all"/>
+    from <include refid="table"/>
+    where uid = #{uid,jdbcType=INTEGER} order by id DESC
+    limit 1
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from <include refid="table"/>
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.ershou.bishe_demo1.Pojo.OrderForm" >
+    insert into <include refid="table"/> (id, modified, state, paystate,
+      uid, sellerid, address, message, name, tel
+      )
+    values (#{id,jdbcType=INTEGER}, #{modified,jdbcType=TIMESTAMP}, #{state,jdbcType=INTEGER}, #{paystate,jdbcType=INTEGER},
+        #{uid,jdbcType=INTEGER}, #{sellerid,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR}, #{message,jdbcType=VARCHAR},
+        #{name,jdbcType=VARCHAR}, #{tel,jdbcType=CHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ershou.bishe_demo1.Pojo.OrderForm" >
+    insert into <include refid="table"/>
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="modified != null" >
+        modified,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="state != null" >
+        paystate,
+      </if>
+      <if test="uid != null" >
+        uid,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="sellerid != null" >
+        sellerid,
+      </if>
+      <if test="message != null" >
+        message,
+      </if>
+      <if test="tel != null" >
+        tel,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="modified != null" >
+        #{modified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="paystate != null" >
+        #{paystate,jdbcType=INTEGER},
+      </if>
+      <if test="uid != null" >
+        #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="sellerid != null" >
+        #{sellerid,jdbcType=INTEGER},
+      </if>
+      <if test="message != null" >
+        #{message,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        #{tel,jdbcType=CHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ershou.bishe_demo1.Pojo.OrderForm" >
+    update <include refid="table"/>
+    <set >
+      <if test="modified != null" >
+        modified = #{modified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="paystate != null" >
+        paystate = #{paystate,jdbcType=INTEGER},
+      </if>
+      <if test="uid != null" >
+        uid = #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="sellerid != null" >
+        sellerid = #{sellerid,jdbcType=INTEGER},
+      </if>
+      <if test="message != null" >
+        message = #{message,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        tel = #{tel,jdbcType=CHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ershou.bishe_demo1.Pojo.OrderForm" >
+    update
+    <include refid="table"/>
+    set modified = #{modified,jdbcType=TIMESTAMP},
+      state = #{state,jdbcType=INTEGER},
+      paystate = #{paystate,jdbcType=INTEGER},
+      uid = #{uid,jdbcType=INTEGER},
+      address = #{address,jdbcType=VARCHAR},
+      sellerid = #{sellerid,jdbcType=INTEGER},
+      tel = #{tel,jdbcType=CHAR},
+      name = #{name,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
